@@ -1,8 +1,7 @@
 'use strict';
 
 const express = require('express');
-const dataModules = require('../models');
-const basicAuth = require('../middleware/basic.js');
+const dataModules = require('../models/index.js');
 const bearerAuth = require('../middleware/bearer.js');
 const permissions = require('../middleware/acl.js');
 
@@ -18,8 +17,8 @@ v2Router.param('model', (req, res, next) => {
   }
 });
 
-v2Router.get('/:model', basicAuth, handleGetAll);
-v2Router.get('/:model/:id', basicAuth, handleGetOne);
+v2Router.get('/:model', bearerAuth, permissions('read'),handleGetAll);
+v2Router.get('/:model/:id', bearerAuth, permissions('read'), handleGetOne);
 v2Router.post('/:model', bearerAuth, permissions('create'), handleCreate);
 v2Router.put('/:model/:id', bearerAuth, permissions('update'), handleUpdate);
 v2Router.delete('/:model/:id', bearerAuth, permissions('delete'), handleDelete);
